@@ -5,7 +5,7 @@
 ## Workflow -- ML Pipeline
 1. Data ingestion
 2. Data validation
-3. Data transformation
+3. Data transformation -- feature enginnering, Data Preprocessing
 4. Model training
 5. Model evaluation
 6. Model deployment
