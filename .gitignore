@@ -1,3 +1,6 @@
-venv
 .vscode
-/Data_science[1]-end-to-end.code-workspace
+__pycache__
+logs/
+artifacts/
+*.log
+.venv/

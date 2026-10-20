@@ -1,2 +1,90 @@
 [2026-10-20 09:34:12,050:INFO:main:3:Welcome to our costume logging ]
 [2026-10-20 09:34:52,911:INFO:main:3:Welcome to our costume logging data science]
+[2026-10-20 11:23:12,612:INFO:common:31:yaml file: config/config.yaml loaded successfully]
+[2026-10-20 11:23:12,614:INFO:common:31:yaml file: params.yaml loaded successfully]
+[2026-10-20 11:24:10,283:INFO:common:31:yaml file: config/config.yaml loaded successfully]
+[2026-10-20 11:24:10,286:INFO:common:31:yaml file: params.yaml loaded successfully]
+[2026-10-20 11:24:10,288:INFO:common:31:yaml file: schema.yaml loaded successfully]
+[2026-10-20 11:24:10,292:INFO:common:59:Directory created: artifacts]
+[2026-10-20 11:24:10,293:INFO:common:59:Directory created: artifacts/data_ingestion]
+[2026-10-20 11:24:10,294:INFO:1016667703:17:File already exists of the]
+[2026-10-20 11:32:04,683:INFO:common:31:yaml file: config/config.yaml loaded successfully]
+[2026-10-20 11:32:04,685:INFO:common:31:yaml file: params.yaml loaded successfully]
+[2026-10-20 11:32:04,686:INFO:common:31:yaml file: schema.yaml loaded successfully]
+[2026-10-20 11:32:04,686:INFO:common:59:Directory created: artifacts]
+[2026-10-20 11:32:04,687:INFO:common:59:Directory created: artifacts/data_ingestion]
+[2026-10-20 11:32:05,661:INFO:<string>:50:artifacts/data_ingestion/data.zip download ! with following info :
+Connection: close
+Content-Length: 23329
+Cache-Control: max-age=300
+Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+Content-Type: application/zip
+ETag: "c69888a4ae59bc5a893392785a938ccd4937981c06ba8a9d6a21aa52b4ab5b6e"
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-XSS-Protection: 1; mode=block
+X-GitHub-Request-Id: A3D2:D30F6:535A:615C:6AD70319
+x-github-edge-region: centralindia
+Accept-Ranges: bytes
+Date: Tue, 20 Oct 2026 06:02:05 GMT
+Via: 1.1 varnish
+X-Served-By: cache-maa10238-MAA
+X-Cache: HIT
+X-Cache-Hits: 0
+X-Timer: S1792476126.638798,VS0,VE1
+Vary: Authorization,Accept-Encoding
+Access-Control-Allow-Origin: *
+Cross-Origin-Resource-Policy: cross-origin
+X-Fastly-Request-ID: 7b8bfe6fd469508efcb08d260a5b0a8174766291
+Expires: Tue, 20 Oct 2026 06:07:05 GMT
+Source-Age: 195
+
+]
+[2026-10-20 11:33:28,169:INFO:common:31:yaml file: config/config.yaml loaded successfully]
+[2026-10-20 11:33:28,171:INFO:common:31:yaml file: params.yaml loaded successfully]
+[2026-10-20 11:33:28,173:INFO:common:31:yaml file: schema.yaml loaded successfully]
+[2026-10-20 11:33:28,174:INFO:common:59:Directory created: artifacts]
+[2026-10-20 11:33:28,175:INFO:common:59:Directory created: artifacts/data_ingestion]
+[2026-10-20 11:33:28,750:INFO:2090239321:14:artifacts/data_ingestion/data.zip downloaded with following info:
+Connection: close
+Content-Length: 23329
+Cache-Control: max-age=300
+Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+Content-Type: application/zip
+ETag: "c69888a4ae59bc5a893392785a938ccd4937981c06ba8a9d6a21aa52b4ab5b6e"
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-XSS-Protection: 1; mode=block
+X-GitHub-Request-Id: A3D2:D30F6:535A:615C:6AD70319
+x-github-edge-region: centralindia
+Accept-Ranges: bytes
+Date: Tue, 20 Oct 2026 06:03:28 GMT
+Via: 1.1 varnish
+X-Served-By: cache-maa10239-MAA
+X-Cache: HIT
+X-Cache-Hits: 1
+X-Timer: S1792476209.728762,VS0,VE2
+Vary: Authorization,Accept-Encoding
+Access-Control-Allow-Origin: *
+Cross-Origin-Resource-Policy: cross-origin
+X-Fastly-Request-ID: 6249cf292189fba0bfb5fe48cb1dd0da2c5d60d1
+Expires: Tue, 20 Oct 2026 06:08:28 GMT
+Source-Age: 279
+
+]
+[2026-10-20 11:35:46,394:INFO:common:31:yaml file: config/config.yaml loaded successfully]
+[2026-10-20 11:35:46,398:INFO:common:31:yaml file: params.yaml loaded successfully]
+[2026-10-20 11:35:46,402:INFO:common:31:yaml file: schema.yaml loaded successfully]
+[2026-10-20 11:35:46,404:INFO:common:59:Directory created: artifacts]
+[2026-10-20 11:35:46,407:INFO:common:59:Directory created: artifacts/data_ingestion]
+[2026-10-20 11:35:46,409:INFO:2090239321:16:File already exists]
+[2026-10-20 11:56:17,017:INFO:main:10:>>>>>>>>>>>>>>>>>>Starting Data Ingestion<<<<<<<<<<<<<<<<<<<<<<<]
+[2026-10-20 11:56:17,018:INFO:common:31:yaml file: config/config.yaml loaded successfully]
+[2026-10-20 11:56:17,019:INFO:common:31:yaml file: params.yaml loaded successfully]
+[2026-10-20 11:56:17,019:INFO:common:31:yaml file: schema.yaml loaded successfully]
+[2026-10-20 11:56:17,019:INFO:common:59:Directory created: artifacts]
+[2026-10-20 11:56:17,020:INFO:common:59:Directory created: artifacts/data_ingestion]
+[2026-10-20 11:56:17,020:INFO:data_ingestion:22:File already exists]
+[2026-10-20 11:56:17,022:INFO:main:13:>>>>>>>>>>>>>>>>>>Completed Data Ingestion<<<<<<<<<<<<<<<<<<<<<<<]
