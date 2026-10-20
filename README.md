@@ -7,8 +7,7 @@
 2. Data validation
 3. Data transformation -- feature enginnering, Data Preprocessing
 4. Model training
-5. Model evaluation
-6. Model deployment
+5. Model evaluation -- mlflow, Dagshub
 
 ## Workflow
 1. Update config.yaml
