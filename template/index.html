@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VinAI • Wine Quality Intelligence Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0710;
+            --bg-secondary: #130e1e;
+            --bg-card: rgba(26, 18, 38, 0.65);
+            --bg-card-hover: rgba(36, 25, 54, 0.75);
+            --bg-input: rgba(14, 10, 24, 0.85);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(230, 57, 70, 0.3);
+            
+            --wine-primary: #9d0208;
+            --wine-accent: #d00000;
+            --wine-glow: #e85d04;
+            --purple-glow: #7209b7;
+            --emerald: #10b981;
+            
+            --text-title: #f8fafc;
+            --text-body: #cbd5e1;
+            --text-muted: #94a3b8;
+            --text-highlight: #ffccd5;
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+            --radius-pill: 9999px;
+            
+            --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 35px -5px rgba(157, 2, 8, 0.35);
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(114, 9, 183, 0.18) 0%, transparent 40%),
+                radial-gradient(circle at 85% 20%, rgba(157, 2, 8, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(208, 0, 0, 0.12) 0%, transparent 50%),
+                linear-gradient(to bottom, #09060e, #0d0817 50%, #08050d);
+            background-attachment: fixed;
+        }
+
+        /* Top Bar Navigation */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 2.5rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(10, 7, 16, 0.7);
+            border-bottom: 1px solid var(--border-glass);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7209b7, #d00000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(208, 0, 0, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+        }
+
+        .brand-name {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: -0.02em;
+            color: var(--text-title);
+        }
+
+        .brand-name span {
+            background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-pill);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #34d399;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.25); }
+        }
+
+        .train-link {
+            padding: 0.45rem 1rem;
+            border-radius: var(--radius-pill);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-body);
+            text-decoration: none;
+            font-size: 0.825rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .train-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Container */
+        .hero-section {
+            text-align: center;
+            padding: 3.5rem 1.5rem 2rem;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 1rem;
+            border-radius: var(--radius-pill);
+            background: rgba(157, 2, 8, 0.18);
+            border: 1px solid rgba(230, 57, 70, 0.35);
+            color: #ffccd5;
+            font-size: 0.825rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: var(--text-title);
+            margin-bottom: 1rem;
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(135deg, #ffffff 30%, #ff758f 70%, #d00000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 640px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Preset Chips */
+        .presets-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .preset-label {
+            font-size: 0.825rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            color: var(--text-body);
+            padding: 0.4rem 0.9rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.825rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .preset-btn:hover {
+            background: rgba(208, 0, 0, 0.15);
+            border-color: rgba(230, 57, 70, 0.4);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* Form Card */
+        .main-container {
+            max-width: 1120px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .glass-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-subtle), var(--shadow-glow);
+            padding: 2.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(230, 57, 70, 0.8), rgba(114, 9, 183, 0.8), transparent);
+        }
+
+        .form-section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .form-section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-title);
+        }
+
+        .form-section-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem 1.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-title {
+                font-size: 2.35rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .glass-panel {
+                padding: 1.5rem;
+            }
+            .navbar {
+                padding: 1rem 1.25rem;
+            }
+            .hero-title {
+                font-size: 1.85rem;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .unit-badge {
+            font-size: 0.725rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.15rem 0.45rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 0.8rem 1rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #ffffff;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .custom-input:focus {
+            border-color: rgba(230, 57, 70, 0.7);
+            background: rgba(20, 14, 32, 0.95);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2), 0 0 20px rgba(208, 0, 0, 0.15);
+        }
+
+        .custom-input:hover:not(:focus) {
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .input-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 0.2rem;
+        }
+
+        /* Action Row */
+        .form-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            padding-top: 1.75rem;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .specs-info {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .specs-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .specs-item svg {
+            width: 15px;
+            height: 15px;
+            fill: #a855f7;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #a4161a 0%, #ba181b 40%, #e5383b 100%);
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.01em;
+            padding: 0.95rem 2.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(208, 0, 0, 0.5), 0 0 20px rgba(229, 56, 59, 0.35);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px -4px rgba(208, 0, 0, 0.65), 0 0 30px rgba(229, 56, 59, 0.55);
+            background: linear-gradient(135deg, #ba181b 0%, #e5383b 50%, #f77f00 100%);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            font-size: 0.825rem;
+        }
+
+        footer a {
+            color: #ff758f;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <a href="/" class="brand-container">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+            </div>
+            <div class="brand-name">Vin<span>AI</span> Systems</div>
+        </a>
+
+        <div class="nav-meta">
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                <span>ElasticNet v1.0.4 Online</span>
+            </div>
+            <a href="/train" class="train-link" title="Re-trigger ML Pipeline Training">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                </svg>
+                <span>Pipeline Retrain</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Precision Sommelier ML Analytics
+        </div>
+        <h1 class="hero-title">
+            Physicochemical Wine <br>
+            <span class="gradient-text">Quality Prediction Platform</span>
+        </h1>
+        <p class="hero-description">
+            Leverage enterprise-grade regularized ElasticNet regression to evaluate wine profile characteristics against standard quality benchmarks in milliseconds.
+        </p>
+
+        <!-- Preset Profiles -->
+        <div class="presets-row">
+            <span class="preset-label">Load Preset Profile:</span>
+            <button type="button" class="preset-btn" onclick="loadPreset('merlot')">
+                🍷 Balanced Merlot (Rating ~6)
+            </button>
+            <button type="button" class="preset-btn" onclick="loadPreset('reserve')">
+                🏆 Reserve Cabernet (Rating ~7.5)
+            </button>
+            <button type="button" class="preset-btn" onclick="loadPreset('table')">
+                🍇 Everyday Table Wine (Rating ~5)
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Form Section -->
+    <main class="main-container">
+        <div class="glass-panel">
+            <div class="form-section-header">
+                <div>
+                    <h2 class="form-section-title">Physicochemical Laboratory Parameters</h2>
+                    <p class="form-section-subtitle">Input 11 certified laboratory metrics corresponding to the sample test batch</p>
+                </div>
+            </div>
+
+            <form action="/predict" method="post" id="predictionForm">
+                <div class="features-grid">
+
+                    <!-- Fixed Acidity -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="fixed_acidity" class="input-label">Fixed Acidity</label>
+                            <span class="unit-badge">g(tartaric)/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.01" min="3.0" max="18.0" name="fixed_acidity" id="fixed_acidity" class="custom-input" value="7.4" required placeholder="e.g. 7.4">
+                        </div>
+                        <div class="input-hint">
+                            <span>Non-volatile acids</span>
+                            <span>Std: 4.6 – 15.9</span>
+                        </div>
+                    </div>
+
+                    <!-- Volatile Acidity -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="volatile_acidity" class="input-label">Volatile Acidity</label>
+                            <span class="unit-badge">g(acetic)/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.001" min="0.05" max="2.0" name="volatile_acidity" id="volatile_acidity" class="custom-input" value="0.70" required placeholder="e.g. 0.70">
+                        </div>
+                        <div class="input-hint">
+                            <span>Acetic acid volume</span>
+                            <span>Std: 0.12 – 1.58</span>
+                        </div>
+                    </div>
+
+                    <!-- Citric Acid -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="citric_acid" class="input-label">Citric Acid</label>
+                            <span class="unit-badge">g/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.01" min="0.0" max="1.5" name="citric_acid" id="citric_acid" class="custom-input" value="0.00" required placeholder="e.g. 0.00">
+                        </div>
+                        <div class="input-hint">
+                            <span>Freshness & crispness</span>
+                            <span>Std: 0.00 – 1.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Residual Sugar -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="residual_sugar" class="input-label">Residual Sugar</label>
+                            <span class="unit-badge">g/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.01" min="0.5" max="20.0" name="residual_sugar" id="residual_sugar" class="custom-input" value="1.9" required placeholder="e.g. 1.9">
+                        </div>
+                        <div class="input-hint">
+                            <span>Post-ferment sugar</span>
+                            <span>Std: 0.9 – 15.5</span>
+                        </div>
+                    </div>
+
+                    <!-- Chlorides -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="chlorides" class="input-label">Chlorides</label>
+                            <span class="unit-badge">g(NaCl)/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.001" min="0.005" max="0.7" name="chlorides" id="chlorides" class="custom-input" value="0.076" required placeholder="e.g. 0.076">
+                        </div>
+                        <div class="input-hint">
+                            <span>Total salt content</span>
+                            <span>Std: 0.012 – 0.611</span>
+                        </div>
+                    </div>
+
+                    <!-- Free Sulfur Dioxide -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="free_sulfur_dioxide" class="input-label">Free Sulfur Dioxide</label>
+                            <span class="unit-badge">mg/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.5" min="1.0" max="80.0" name="free_sulfur_dioxide" id="free_sulfur_dioxide" class="custom-input" value="11.0" required placeholder="e.g. 11.0">
+                        </div>
+                        <div class="input-hint">
+                            <span>Active preservative SO₂</span>
+                            <span>Std: 1 – 72</span>
+                        </div>
+                    </div>
+
+                    <!-- Total Sulfur Dioxide -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="total_sulfur_dioxide" class="input-label">Total Sulfur Dioxide</label>
+                            <span class="unit-badge">mg/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="1.0" min="5.0" max="300.0" name="total_sulfur_dioxide" id="total_sulfur_dioxide" class="custom-input" value="34.0" required placeholder="e.g. 34.0">
+                        </div>
+                        <div class="input-hint">
+                            <span>Bound & free SO₂</span>
+                            <span>Std: 6 – 289</span>
+                        </div>
+                    </div>
+
+                    <!-- Density -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="density" class="input-label">Density</label>
+                            <span class="unit-badge">g/cm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.0001" min="0.98" max="1.02" name="density" id="density" class="custom-input" value="0.9978" required placeholder="e.g. 0.9978">
+                        </div>
+                        <div class="input-hint">
+                            <span>Mass density ratio</span>
+                            <span>Std: 0.990 – 1.003</span>
+                        </div>
+                    </div>
+
+                    <!-- pH -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="pH" class="input-label">pH Level</label>
+                            <span class="unit-badge">scale 0–14</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.01" min="2.5" max="4.5" name="pH" id="pH" class="custom-input" value="3.51" required placeholder="e.g. 3.51">
+                        </div>
+                        <div class="input-hint">
+                            <span>Acidity balance</span>
+                            <span>Std: 2.74 – 4.01</span>
+                        </div>
+                    </div>
+
+                    <!-- Sulphates -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="sulphates" class="input-label">Sulphates</label>
+                            <span class="unit-badge">g(K₂SO₄)/dm³</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.01" min="0.2" max="2.5" name="sulphates" id="sulphates" class="custom-input" value="0.56" required placeholder="e.g. 0.56">
+                        </div>
+                        <div class="input-hint">
+                            <span>Antimicrobial additive</span>
+                            <span>Std: 0.33 – 2.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Alcohol -->
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="alcohol" class="input-label">Alcohol Content</label>
+                            <span class="unit-badge">% vol</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.1" min="7.0" max="17.0" name="alcohol" id="alcohol" class="custom-input" value="9.4" required placeholder="e.g. 9.4">
+                        </div>
+                        <div class="input-hint">
+                            <span>Ethanol concentration</span>
+                            <span>Std: 8.4 – 14.9</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <div class="specs-info">
+                        <div class="specs-item">
+                            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            <span>Model: ElasticNet (alpha: 0.2, l1: 0.1)</span>
+                        </div>
+                        <div class="specs-item">
+                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                            <span>Target: Red Wine Quality (Score 1 - 10)</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="predictBtn">
+                        <span>Compute Quality Score</span>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42 5.43 5.43H5v2.44z"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 VinAI Analytics Inc. • End-to-End MLOps Pipeline with MLflow & DagsHub • Production Grade Deployment</p>
+    </footer>
+
+    <!-- Presets Script -->
+    <script>
+        const PRESETS = {
+            merlot: {
+                fixed_acidity: 7.4,
+                volatile_acidity: 0.70,
+                citric_acid: 0.00,
+                residual_sugar: 1.9,
+                chlorides: 0.076,
+                free_sulfur_dioxide: 11.0,
+                total_sulfur_dioxide: 34.0,
+                density: 0.9978,
+                pH: 3.51,
+                sulphates: 0.56,
+                alcohol: 9.4
+            },
+            reserve: {
+                fixed_acidity: 8.5,
+                volatile_acidity: 0.28,
+                citric_acid: 0.56,
+                residual_sugar: 2.3,
+                chlorides: 0.065,
+                free_sulfur_dioxide: 18.0,
+                total_sulfur_dioxide: 42.0,
+                density: 0.9946,
+                pH: 3.28,
+                sulphates: 0.88,
+                alcohol: 12.8
+            },
+            table: {
+                fixed_acidity: 6.8,
+                volatile_acidity: 0.88,
+                citric_acid: 0.04,
+                residual_sugar: 1.8,
+                chlorides: 0.092,
+                free_sulfur_dioxide: 7.0,
+                total_sulfur_dioxide: 28.0,
+                density: 0.9982,
+                pH: 3.65,
+                sulphates: 0.49,
+                alcohol: 9.1
+            }
+        };
+
+        function loadPreset(key) {
+            const data = PRESETS[key];
+            if (!data) return;
+            for (const [field, val] of Object.entries(data)) {
+                const el = document.getElementById(field);
+                if (el) {
+                    el.value = val;
+                    el.style.borderColor = 'rgba(230, 57, 70, 0.9)';
+                    setTimeout(() => { el.style.borderColor = ''; }, 600);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
